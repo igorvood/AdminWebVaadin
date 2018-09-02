@@ -6,7 +6,6 @@ import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -27,7 +26,7 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
     private val delete = Button("Delete", VaadinIcon.TRASH.create())
     private val actions = HorizontalLayout(save, cancel, delete)
 
-    private var binder: Binder<T>
+    private var binder: Binder<T>? = null
     private var type: Class<T>
     private lateinit var entity: T
     private lateinit var changeHandler: AbstractEditorKT.ChangeHandler
@@ -38,30 +37,6 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
     constructor(type: Class<T>, repository: R) : super() {
         this.type = type
         this.repository = repository
-        this.binder = Binder<T>(type)
-        //this.binder = Binder<T>()
-
-        // получение по типу сущности type необходимой информации о полях
-        val fieldsFor = getFields()//FieldForEditor(type).fields
-        if (fieldsFor != null) {
-            for (field in fieldsFor) {
-                //создание для каждого поля сущности соответствующего компонента для редактирования
-//            if ((field.value.mappedField::class.java == ComboBox::class.java)) {
-//                var c = field.value.mappedField as ComboBox
-//                c.items = typeCustomerRepository.findAll()
-//
-//            }
-                fields.put(field.key, field.value.mappedField)
-                TuneBinder.tune(binder, field.value)
-                //          }
-            }
-        }
-        //помещеие компонентов на экранную форму
-        val components = ArrayList<Component>(fields.size + 1)
-        components.addAll(fields.values)
-        components.add(actions)
-        add(*components.toTypedArray())
-
 
         // Configure and style components
         isSpacing = true
@@ -71,13 +46,41 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
         //addKeyPressListener(Key.ENTER, { e -> save() })
         addKeyPressListener(Key.ENTER, ComponentEventListener { e -> save() })
 
-
         // wire action buttons to save, delete and reset
         save.addClickListener { e -> save() }
         delete.addClickListener { e -> delete() }
         cancel.addClickListener { e -> editEntity(entity) }
+
         isVisible = false
 
+    }
+
+    private fun initBinder() {
+        if (this.binder == null) {
+            this.binder = Binder<T>(type)
+            //this.binder = Binder<T>()
+
+            // получение по типу сущности type необходимой информации о полях
+            val fieldsFor = getFields()//FieldForEditor(type).fields
+            if (fieldsFor != null) {
+                for (field in fieldsFor) {
+                    //создание для каждого поля сущности соответствующего компонента для редактирования
+//            if ((field.value.mappedField::class.java == ComboBox::class.java)) {
+//                var c = field.value.mappedField as ComboBox
+//                c.items = typeCustomerRepository.findAll()
+//
+//            }
+                    fields.put(field.key, field.value.mappedField)
+                    TuneBinder.tune(binder, field.value)
+                    //          }
+                }
+            }
+            //помещеие компонентов на экранную форму
+            val components = ArrayList<Component>(fields.size + 1)
+            components.addAll(fields.values)
+            components.add(actions)
+            add(*components.toTypedArray())
+        }
     }
 
     protected open fun getFields(): Map<String, FieldForEditor.FieldPropertyEditor> {
@@ -94,11 +97,15 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
             return
         }
 
+        initBinder()
+
+/*
         val toList = getFields()!!.values.asSequence()
                 .filter { entity -> entity.mappedField is ComboBox<*> }
                 .toList()
         //.forEach { propertyEditor -> (propertyEditor.mappedField as ComboBox<*>).setItems(propertyEditor.dataFromRepo)  }
         println(toList)
+*/
 
         val persisted = entity.id != null
         if (persisted) {
@@ -112,7 +119,7 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
         // Bind customer properties to similarly named fields
         // Could also use annotation or "manual binding" or programmatically
         // moving values from fields to entities before saving
-        binder.setBean(entity)
+        binder!!.bean = entity
 
         isVisible = true
 
@@ -120,12 +127,12 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
 //        firstName.focus()
     }
 
-    internal fun delete() {
+    private fun delete() {
         repository.delete(entity)
         changeHandler.onChange()
     }
 
-    internal fun save() {
+    private fun save() {
         repository.save<T>(entity)
         changeHandler.onChange()
     }

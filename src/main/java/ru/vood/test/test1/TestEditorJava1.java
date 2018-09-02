@@ -33,17 +33,22 @@ public class TestEditorJava1 extends AbstractEditorKT<Customer, CustomerReposito
     protected Map<String, FieldForEditor.FieldPropertyEditor> getFields() {
         final Map<String, FieldForEditor.FieldPropertyEditor> fields = super.getFields();
         final FieldForEditor.FieldPropertyEditor typeCustomer = fields.get("typeCustomer");
-/*
-        typeCustomer.setValueProvider(o -> {
-            return ((Customer) o).getTypeCustomer().getCode();
 
+/*
+
+        typeCustomer.setValueProvider(o -> {
+            if (((Customer) o).getTypeCustomer() != null) {
+                return ((Customer) o).getTypeCustomer().getCode();
+            } else {
+                return null;
+            }
         });
         typeCustomer.setSetter((o, o2) -> ((Customer) o).setTypeCustomer((TypeCustomer) o2));
 */
-        if (typeCustomerRepository != null) {
-            typeCustomer.setDataFromRepo(typeCustomerRepository.findAll());
-            ((ComboBox) typeCustomer.getMappedField()).setItems(typeCustomer.getDataFromRepo());
-        }
+
+
+        typeCustomer.setDataFromRepo(typeCustomerRepository.findAll());
+        ((ComboBox) typeCustomer.getMappedField()).setItems(typeCustomer.getDataFromRepo());
         return fields;
     }
 }
