@@ -16,9 +16,5 @@ public class TuneBinder {
         } else {
             bindingBuilder.bind(propertyEditorMap.getFieldName());
         }
-//        if (propertyEditorMap.getDataFromRepo()!=null){
-//            ((ComboBox)propertyEditorMap.getMappedField()).setItems(propertyEditorMap.getDataFromRepo());
-//        }
-        //bindingBuilder.bind(propertyEditorMap.getFieldName());
     }
 }

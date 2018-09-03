@@ -18,14 +18,14 @@ import java.util.ArrayList
 import kotlin.collections.HashMap
 
 
-open abstract class AbstractGridKT<T : EntityInterface, R : JpaRepository<T, BigDecimal>, Z : AbstractEditorKT<T, R>> : VerticalLayout {
+abstract class AbstractGridKT<T : EntityInterface, R : JpaRepository<T, BigDecimal>, Z : AbstractEditorKT<T, R>> : VerticalLayout {
 
-    lateinit var grid: com.vaadin.flow.component.grid.Grid<T>
+    private var grid: com.vaadin.flow.component.grid.Grid<T>
 
-    lateinit var repo: R
-    lateinit var addNewBtn: Button
-    lateinit var type: Class<T>
-    lateinit var editor: Z
+    private var repo: R
+    private var addNewBtn: Button
+    private var type: Class<T>
+    private var editor: Z
 
 
     //<Z :  AbstractEditorKT<T, R>>
@@ -71,7 +71,7 @@ open abstract class AbstractGridKT<T : EntityInterface, R : JpaRepository<T, Big
                                 .setSortable(true)
                                 .setHeader(entry.value.displayName)
                         val field = TextField()
-                        field.addValueChangeListener { event ->
+                        field.addValueChangeListener { _ ->
                             dataProvider.addFilter { entity ->
                                 StringUtils.containsIgnoreCase(entry.value.getterForView.apply(entity), field.value)
                             }
@@ -91,7 +91,7 @@ open abstract class AbstractGridKT<T : EntityInterface, R : JpaRepository<T, Big
         grid.asSingleSelect().addValueChangeListener { e -> editor.editEntity(e.getValue()) }
 
         // Instantiate and edit new Customer the new button is clicked
-        addNewBtn.addClickListener { e -> editor.editEntity(tFieldForView.instanceT) }
+        addNewBtn.addClickListener { _ -> editor.editEntity(tFieldForView.instanceT) }
 
         // Listen changes made by the editor, refresh data from backend
         editor.setChangeHandler(object : AbstractEditorKT.ChangeHandler {

@@ -1,7 +1,8 @@
-package ru.vood.test;
+package ru.vood.example;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+
 
 @SpringComponent
 @UIScope

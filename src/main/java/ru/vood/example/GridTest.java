@@ -1,8 +1,9 @@
-package ru.vood.test;
+package ru.vood.example;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+
 
 @Route(value = "g")
 public class GridTest extends VerticalLayout {

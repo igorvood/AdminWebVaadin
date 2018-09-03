@@ -1,4 +1,4 @@
-package ru.vood.test;
+package ru.vood.example;
 
 import com.vaadin.flow.router.Route;
 

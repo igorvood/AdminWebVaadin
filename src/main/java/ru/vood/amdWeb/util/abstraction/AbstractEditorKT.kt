@@ -16,8 +16,8 @@ import ru.vood.amdWeb.util.FieldForEditor
 import java.math.BigDecimal
 import java.util.*
 
-open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, BigDecimal>> : VerticalLayout, KeyNotifier {
-    private lateinit var repository: R
+abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, BigDecimal>> : VerticalLayout, KeyNotifier {
+    private var repository: R
     /* Fields to edit properties in entity */
     private var fields: HashMap<String, Component> = HashMap()
     /* Action buttons */
@@ -44,12 +44,12 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
         delete.element.themeList.add("error")
 
         //addKeyPressListener(Key.ENTER, { e -> save() })
-        addKeyPressListener(Key.ENTER, ComponentEventListener { e -> save() })
+        addKeyPressListener(Key.ENTER, ComponentEventListener { _ -> save() })
 
         // wire action buttons to save, delete and reset
-        save.addClickListener { e -> save() }
-        delete.addClickListener { e -> delete() }
-        cancel.addClickListener { e -> editEntity(entity) }
+        save.addClickListener { _ -> save() }
+        delete.addClickListener { _ -> delete() }
+        cancel.addClickListener { _ -> editEntity(entity) }
 
         isVisible = false
 
@@ -62,19 +62,19 @@ open abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, B
 
             // получение по типу сущности type необходимой информации о полях
             val fieldsFor = getFields()//FieldForEditor(type).fields
-            if (fieldsFor != null) {
-                for (field in fieldsFor) {
-                    //создание для каждого поля сущности соответствующего компонента для редактирования
+//            if (fieldsFor != null) {
+            for (field in fieldsFor) {
+                //создание для каждого поля сущности соответствующего компонента для редактирования
 //            if ((field.value.mappedField::class.java == ComboBox::class.java)) {
 //                var c = field.value.mappedField as ComboBox
 //                c.items = typeCustomerRepository.findAll()
 //
 //            }
-                    fields.put(field.key, field.value.mappedField)
-                    TuneBinder.tune(binder, field.value)
-                    //          }
-                }
+                fields.put(field.key, field.value.mappedField)
+                TuneBinder.tune(binder, field.value)
+                //          }
             }
+            //          }
             //помещеие компонентов на экранную форму
             val components = ArrayList<Component>(fields.size + 1)
             components.addAll(fields.values)

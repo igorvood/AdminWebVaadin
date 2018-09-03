@@ -1,4 +1,4 @@
-package ru.vood.test;
+package ru.vood.example;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -10,20 +10,17 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.springframework.util.StringUtils;
 
-@Route(value = "mainView123")
-//@Route
-public class MainView123 extends VerticalLayout {
-    private CustomerRepository repo;
 
-    private CustomerEditor editor;
+@Route(value = "m")
+public class MainView extends VerticalLayout {
 
-    private Grid<Customer> grid;
+    final Grid<Customer> grid;
+    final TextField filter;
+    private final CustomerRepository repo;
+    private final CustomerEditor editor;
+    private final Button addNewBtn;
 
-    private TextField filter;
-
-    private Button addNewBtn;
-
-    public MainView123(CustomerRepository repo, CustomerEditor editor) {
+    public MainView(CustomerRepository repo, CustomerEditor editor) {
         this.repo = repo;
         this.editor = editor;
         this.grid = new Grid<>(Customer.class);
@@ -34,14 +31,11 @@ public class MainView123 extends VerticalLayout {
         HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
         add(actions, grid, editor);
 
-        grid.setHeight("500px");
-        grid.setColumns("id", "firstName", "lastName", "salary", "dateBirth", "typeCustomer", "married");
+        grid.setHeight("300px");
+        grid.setColumns("id", "firstName", "lastName");
+        grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
 
-        grid.setPageSize(2);
-        grid.getColumnByKey("id").setWidth("150px").setFlexGrow(0);
-
-        filter.setPlaceholder("Filter by last name dsadasdasdas");
-
+        filter.setPlaceholder("Filter by last name");
 
         // Hook logic to components
 
@@ -55,6 +49,7 @@ public class MainView123 extends VerticalLayout {
         });
 
         // Instantiate and edit new Customer the new button is clicked
+        //addNewBtn.addClickListener(e -> editor.editEntity(new Customer("", "")));
         addNewBtn.addClickListener(e -> editor.editCustomer(new Customer()));
 
         // Listen changes made by the editor, refresh data from backend
@@ -70,7 +65,6 @@ public class MainView123 extends VerticalLayout {
     // tag::listCustomers[]
     void listCustomers(String filterText) {
         if (StringUtils.isEmpty(filterText)) {
-
             grid.setItems(repo.findAll());
         } else {
             grid.setItems(repo.findByLastNameStartsWithIgnoreCase(filterText));

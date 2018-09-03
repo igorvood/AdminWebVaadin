@@ -1,15 +1,14 @@
-package ru.vood.test.test1;
+package ru.vood.example.test1;
 
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.vood.amdWeb.util.FieldForEditor;
 import ru.vood.amdWeb.util.abstraction.AbstractEditorKT;
-import ru.vood.test.Customer;
-import ru.vood.test.CustomerRepository;
-import ru.vood.test.TypeCustomerRepository;
+import ru.vood.example.Customer;
+import ru.vood.example.CustomerRepository;
+import ru.vood.example.TypeCustomerRepository;
 
 import java.util.Map;
 
@@ -47,8 +46,8 @@ public class TestEditorJava1 extends AbstractEditorKT<Customer, CustomerReposito
 */
 
 
-        typeCustomer.setDataFromRepo(typeCustomerRepository.findAll());
-        ((ComboBox) typeCustomer.getMappedField()).setItems(typeCustomer.getDataFromRepo());
+        typeCustomer.setDataForComboBox(typeCustomerRepository.findAll());
+
         return fields;
     }
 }

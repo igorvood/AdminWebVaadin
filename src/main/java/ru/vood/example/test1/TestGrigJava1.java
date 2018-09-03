@@ -1,12 +1,12 @@
-package ru.vood.test.test1;
+package ru.vood.example.test1;
 
 
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.jetbrains.annotations.NotNull;
 import ru.vood.amdWeb.util.abstraction.AbstractGridKT;
-import ru.vood.test.Customer;
-import ru.vood.test.CustomerRepository;
+import ru.vood.example.Customer;
+import ru.vood.example.CustomerRepository;
 
 @Route(value = "testGrigJava1")
 @UIScope
