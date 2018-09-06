@@ -1,19 +1,9 @@
 package ru.vood.example;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-
-import java.util.Calendar;
-
-@SpringBootApplication
+//@SpringBootApplication
 public class Application {
 
+/*
     private static final Logger log = LoggerFactory.getLogger(Application.class);
     @Autowired
     private ApplicationContext applicationContext;
@@ -58,13 +48,6 @@ public class Application {
             log.info("");
 
             // fetch an individual customer by ID
-/*
-            Customer customer = repository.findById(1L).get();
-            log.info("Customer found with findOne(1L):");
-            log.info("--------------------------------");
-            log.info(customer.toString());
-            log.info("");
-*/
 
             // fetch customers by last name
             log.info("Customer found with findByLastNameStartsWithIgnoreCase('Bauer'):");
@@ -76,5 +59,6 @@ public class Application {
             log.info("");
         };
     }
+*/
 
 }

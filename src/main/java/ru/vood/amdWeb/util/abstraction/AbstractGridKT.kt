@@ -10,7 +10,6 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.ValueProvider
 import org.apache.commons.lang3.StringUtils
-import org.springframework.data.jpa.repository.JpaRepository
 import ru.vood.amdWeb.util.EntityInterface
 import ru.vood.amdWeb.util.FieldForView
 import java.math.BigDecimal
@@ -18,7 +17,7 @@ import java.util.ArrayList
 import kotlin.collections.HashMap
 
 
-abstract class AbstractGridKT<T : EntityInterface, R : JpaRepository<T, BigDecimal>, Z : AbstractEditorKT<T, R>> : VerticalLayout {
+abstract class AbstractGridKT<T : EntityInterface, R : RepositoryForView<T, BigDecimal>, Z : AbstractEditorKT<T, R>> : VerticalLayout {
 
     private var grid: com.vaadin.flow.component.grid.Grid<T>
 

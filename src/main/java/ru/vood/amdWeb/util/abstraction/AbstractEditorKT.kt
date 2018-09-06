@@ -10,13 +10,12 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.data.binder.Binder
-import org.springframework.data.jpa.repository.JpaRepository
 import ru.vood.amdWeb.util.EntityInterface
 import ru.vood.amdWeb.util.FieldForEditor
 import java.math.BigDecimal
 import java.util.*
 
-abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, BigDecimal>> : VerticalLayout, KeyNotifier {
+abstract class AbstractEditorKT<T : EntityInterface, R : RepositoryForView<T, BigDecimal>> : VerticalLayout, KeyNotifier {
     private var repository: R
     /* Fields to edit properties in entity */
     private var fields: HashMap<String, Component> = HashMap()
@@ -133,7 +132,7 @@ abstract class AbstractEditorKT<T : EntityInterface, R : JpaRepository<T, BigDec
     }
 
     private fun save() {
-        repository.save<T>(entity)
+        repository.save(entity)
         changeHandler.onChange()
     }
 
